@@ -6,7 +6,7 @@
 	header('Access-Control-Allow-Methods: PUT, GET, POST, DELETE, OPTIONS');
 
 	$metodo =  $_SERVER['REQUEST_METHOD'];
-
+	
 	$api = new api($metodo);
 	$api->call();
 

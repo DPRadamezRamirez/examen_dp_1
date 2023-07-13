@@ -4,7 +4,7 @@
 	 */
 	class valida
 	{
-		private $response = array();
+		public $response = array();
 		private $rutatemp = "temp/";
 		public function __construct()
 		{			
@@ -21,10 +21,12 @@
 					$this->response["mensaje"] = $mensaje;
 					break;
 			}
+			
 		}
 
 		public function ObtenerResponse(){
-			//Aqui se retorna la respuesta
+			//MOD:: Se agrega variable de retorno
+			return $this->response;
 		}
 
 		public function ExportarJson($nombreArchivo){			

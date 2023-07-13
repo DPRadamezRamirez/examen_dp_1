@@ -15,13 +15,10 @@
 
 		public function call(){
 			try {
-				$tipo = "1";
-				if(isset($_GET['tipo'])){
-					$tipo = $_GET['tipo'];
-				}
-				if(isset($_GET['nombre'])){
-					$nombre = $_GET['nombre'];
-				}
+				//MOD:: Los if ternarios hacen mas limpio el codigo
+				$tipo = isset($_GET['tipo']) ? $_GET['tipo'] : "1";
+            	$nombre = isset($_GET['nombre']) ? $_GET['nombre'] : "";
+
 				switch ($this->metodo) {
 					case 'GET':
 						if($tipo == "1"){
@@ -42,16 +39,18 @@
 			try {
 				$ObjetoColor = new objeto();				
 				$Validar = new valida();
-				$Valor = [];
-				
-				$Validar->CreaRespuesta("0", "", $Valor);
-				
-				echo json_encode($Validar->ObtenerResponse(), JSON_PRETTY_PRINT  | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);
+				//MOD:: Se instancia la lista de objetos
+				$Valor = $ObjetoColor->ObtenerObjeto();
+				//MOD:: Se realiza el envio del objeto a la fincion
+				$Validar->CreaRespuesta("0", "", $Valor);			
 			} catch (Exception $e) {
 				$Validar->CreaRespuesta("-1", "Error", []);
 			}
 			$Response = $Validar->ObtenerResponse();
+			//MOD:: Carecia de sentido tener el response sin utilizar, de esta manera se generan las respuestas y de esta forma se retorna la llamada exitoda o con el error
+			echo json_encode($Response, JSON_PRETTY_PRINT  | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE);
 		}
+		
 		public function exportar($nombreArchivo){
 			try{
 				$Validar = new valida();
@@ -62,7 +61,8 @@
 				file_put_contents($rutatemp . $nombreArchivo, json_encode($ValorObjeto), FILE_APPEND | LOCK_EX);
 				$fileName = basename($nombreArchivo);
 				$filePath = "../".$rutatemp . $fileName;
-				if(!empty($fileName) && file_exists($filePath)){
+				//MOD:: Es suficiente con validar si el archivo existe
+				if(file_exists($filePath)){
 					//echo "rutatemp: " . $rutatemp . ", nombreArchivo: " . $nombreArchivo . ", filePath: " . $filePath  . ", json: " . json_encode($Respuesta);
 
 					//Define header information
